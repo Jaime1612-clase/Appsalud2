@@ -1,0 +1,24 @@
+{
+  "name": "visual",
+  "version": "1.0.0",
+  "description": "gestión de Bascula y Paciente con pruebas",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test --reporter mochawesome"
+  },
+  "keywords": [],
+  "author": "Jaime Carrasco Tudela",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "ascii-table": "^0.0.9",
+    "chai": "^6.2.0",
+    "mocha": "^11.7.5"
+  },
+  "dependencies": {
+    "mochawesome": "^7.1.4"
+  },
+  "directories": {
+    "test": "test"
+  }
+}
