@@ -1,6 +1,7 @@
 const Bascula = require('./Bascula');
 class Paciente {
-  constructor(nombre, apellidos, fechaNacimiento) {
+  constructor(id,nombre, apellidos, fechaNacimiento) {
+    this.id = id;
     this.nombre = nombre;
     this.apellidos = apellidos;
     this.fechaNacimiento = fechaNacimiento;

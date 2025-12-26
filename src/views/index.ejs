@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title%>t</title>
+    <title><%= title %></title>
 </head>
-<body>´
+<body>
     <span style="color: red;">
         <%= message %>
     </span>
     
-    <h1> Listado de Pacientes</h1>
+    <h1>Listado de Pacientes</h1>
 
-        <ul>
-            <% pacientes.forEach(function(paciente) { %>
-                <li>
-                    <strong>
-                        <%= paciente.nombre %>
-                           <%= paciente.apellidos %> 
-                    </strong>
-                    <!-- Boton para ver el paciente -->
-                     <a href="/paciente/<%= paciente.id %>">Ver Paciente</a>
-                </li>       
-                <% }); %>
-        </ul>
+    <ul>
+      <% if (pacientes && pacientes.length > 0) { %>
+        <% pacientes.forEach(function(paciente) { %>
+          <li>
+            <strong><%= paciente.nombre %> <%= paciente.apellidos %></strong>
+            <a href="/Paciente/paciente/<%= paciente.id %>">Ver</a>
+          </li>
+        <% }) %>
+      <% } else { %>
+        <li>No hay pacientes registrados</li>
+      <% } %>
+    </ul>
 
 </body>
 </html>

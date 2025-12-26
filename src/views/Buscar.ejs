@@ -6,26 +6,23 @@
     <title><%= title %></title>
 </head>
 <body>
-    <span style="color: red;">
+    <span style="color: rgb(0, 204, 255);">
         <%= message %>
     </span>
-
         <% if (paciente) { %>
-            <h1> Detalles del Paciente</h1>
-            <p><strong>Id:</strong> <%= paciente.id %></p>
-            <p><strong>Nombre:</strong> <%= paciente.nombre %></p>
-            <p><strong>Apellidos:</strong> <%= paciente.apellidos %></p>
-            <p><strong>Fecha de nacimiento:</strong> <%= paciente.fecha_nacimiento %></p>
-            <p><strong>Género:</strong> <%= paciente.genero %></p>
+        <h1>Detalles del Paciente</h1>
+        <p><strong>Id:</strong> <%= paciente.id %></p>
+        <p><strong>Nombre:</strong> <%= paciente.nombre %></p>
+        <p><strong>Apellidos:</strong> <%= paciente.apellidos %></p>
+    <p><strong>Fecha de nacimiento:</strong> <%= paciente.fechaNacimiento.toISOString().slice(0,10) %></p>
+<% } %>
 
 </body>
 
 <ul>
-    <% }); %>
+    <% } %>
 
     <a href="/">Volver a la lista de pacientes</a>
-
-
 
 </ul>
 
