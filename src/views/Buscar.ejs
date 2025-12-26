@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <span style="color: red;">
+        <%= message %>
+    </span>
+
+        <% if (paciente) { %>
+            <h1> Detalles del Paciente</h1>
+            <p><strong>Id:</strong> <%= paciente.id %></p>
+            <p><strong>Nombre:</strong> <%= paciente.nombre %></p>
+            <p><strong>Apellidos:</strong> <%= paciente.apellidos %></p>
+            <p><strong>Fecha de nacimiento:</strong> <%= paciente.fecha_nacimiento %></p>
+            <p><strong>Género:</strong> <%= paciente.genero %></p>
+
+</body>
+
+<ul>
+    <% }); %>
+
+    <a href="/">Volver a la lista de pacientes</a>
+
+
+
+</ul>
+
+</html>

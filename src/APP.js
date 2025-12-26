@@ -4,8 +4,8 @@ const path = require('path');
 const methodOverride = require('method-override');
 
 // rutas
-const pacienteRouter = require('./routes/Paciente');
-const basculaRouter = require('./routes/Bascula');
+const pacienteRouter = require('./routes/paciente');
+const basculaRouter = require('./routes/bascula');
 
 const app = express();
 const PORT = 3000;

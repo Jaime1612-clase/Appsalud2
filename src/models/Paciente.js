@@ -3,6 +3,7 @@ class Paciente {
   constructor(nombre, apellidos, fechaNacimiento) {
     this.nombre = nombre;
     this.apellidos = apellidos;
+    this.fechaNacimiento = fechaNacimiento;
 
     // Validación de fecha
     const fecha = new Date(fechaNacimiento);

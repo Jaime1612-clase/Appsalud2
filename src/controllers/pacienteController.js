@@ -1,25 +1,37 @@
-const pacienteRepository =require('../repositories/PacienteRepository');
+const pacienteRepository = require('../repositories/PacienteRepository');
 
-
-const obtenerPaciente = async (req, res) => {
-
+const obtenerPaciente = async (req, res) => { 
+    const id  = req.params.id;
+    if (!id) {
+        return res.status(400).send('El ID de paciente es obligatorio');
+    }
+    const paciente = await pacienteRepository.buscarPorId(id);
+    if (!paciente) {
+        return res.render('Buscar', {
+            title: 'App Salud',
+            message: 'Error: Paciente no encontrado'
+        });
+    }
+    res.render('paciente', { paciente });
 };
 
 const crearPaciente = async (req, res) => {
-
+    res.send('Función crearPaciente en construcción');
 };
 
 const actualizarPaciente = async (req, res) => {
-
+    res.send('Función actualizarPaciente en construcción');
 };
 
 const eliminarPaciente = async (req, res) => {
-
+    res.send('Función eliminarPaciente en construcción');
 };
 
 const mostrarFormularioActualizarPaciente = async (req, res) => {
     const { id } = req.params;
-    const paciente = await pacienteRepository.obtener ? await pacienteRepository.obtener(id) : null;
+    const paciente = await pacienteRepository.obtener
+        ? await pacienteRepository.obtener(id)
+        : null;
     res.json({ message: 'mostrarFormularioActualizarPaciente', id, paciente });
 };
 
