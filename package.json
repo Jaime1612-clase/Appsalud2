@@ -16,9 +16,20 @@
     "mocha": "^11.7.5"
   },
   "dependencies": {
-    "mochawesome": "^7.1.4"
+    "express": "^5.2.1",
+    "method-override": "^3.0.0",
+    "mochawesome": "^7.1.4",
+    "mysql2": "^3.16.0"
   },
   "directories": {
     "test": "test"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jaime1612-clase/Appsalud2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jaime1612-clase/Appsalud2/issues"
+  },
+  "homepage": "https://github.com/Jaime1612-clase/Appsalud2#readme"
 }
