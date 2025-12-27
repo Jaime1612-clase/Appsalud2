@@ -1,29 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
 </head>
 <body>
-    <span style="color: red;">
-        <%= message %>
-    </span>
+    <h1><%= title %></h1>
     
-    <h1>Listado de Pacientes</h1>
-
-    <ul>
-      <% if (pacientes && pacientes.length > 0) { %>
-        <% pacientes.forEach(function(paciente) { %>
-          <li>
-            <strong><%= paciente.nombre %> <%= paciente.apellidos %></strong>
-            <a href="/Paciente/paciente/<%= paciente.id %>">Ver</a>
-          </li>
-        <% }) %>
-      <% } else { %>
-        <li>No hay pacientes registrados</li>
-      <% } %>
-    </ul>
-
+    <% if (message) { %>
+        <p><strong><%= message %></strong></p>
+    <% } %>
+    
+    <h2>Lista de Pacientes</h2>
+    
+    <% if (pacientes && pacientes.length > 0) { %>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Fecha de Nacimiento</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% pacientes.forEach(paciente => { %>
+                    <tr>
+                        <td><%= paciente.id %></td>
+                        <td><%= paciente.nombre %></td>
+                        <td><%= paciente.apellidos %></td>
+                        <td><%= paciente.fechaDeNacimiento %></td>
+                        <td>
+                            <a href="/pacientes/<%= paciente.id %>">Ver</a>
+                            <a href="/pacientes/editar/<%= paciente.id %>">Editar</a>
+                            <form action="/pacientes/<%= paciente.id %>?_method=DELETE" method="POST" style="display:inline;">
+                                <button type="submit">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No hay pacientes registrados.</p>
+    <% } %>
+    
+    <h3>Agregar Nuevo Paciente</h3>
+    <form action="/pacientes" method="POST">
+        <div>
+            <label>Nombre:</label>
+            <input type="text" name="nombre" required>
+        </div>
+        <div>
+            <label>Apellidos:</label>
+            <input type="text" name="apellidos" required>
+        </div>
+        <div>
+            <label>Fecha de Nacimiento:</label>
+            <input type="date" name="fechaDeNacimiento" required>
+        </div>
+        <button type="submit">Crear Paciente</button>
+    </form>
+    
+    <hr>
+    <p><a href="/pacientes">Actualizar lista</a></p>
 </body>
 </html>

@@ -5,6 +5,7 @@ class Paciente {
     this.nombre = nombre;
     this.apellidos = apellidos;
     this.fechaNacimiento = fechaNacimiento;
+    this.miBascula = null;
 
     // Validación de fecha
     const fecha = new Date(fechaNacimiento);
@@ -22,15 +23,15 @@ class Paciente {
     return `Hola, soy ${this.nombre} ${this.apellidos}`;
   }
 
-  // Métodos de nombre
+  
   obtenerNombre() { return this.nombre; }
   modificarNombre(nombre) { this.nombre = nombre; }
 
-  // Métodos de apellidos
+ 
   obtenerApellidos() { return this.apellidos; }
   modificarApellidos(apellidos) { this.apellidos = apellidos; }
 
-  // Métodos de fecha de nacimiento
+ 
   obtenerFechaNacimiento() { return this.fechaNacimiento; }
 
   modificarFechaNacimiento(fecha) {
@@ -52,13 +53,13 @@ class Paciente {
     return edad;
   }
 
-  // Asociación con la báscula
-  modificarBascula(bascula) { this.bascula = bascula; }
-  obtenerBascula() { return this.bascula; }
-
-  // Calcula el IMC delegando la operación a la báscula
-  calcularIMCO() {
-    return this.bascula.calcularIMCO();
+  calcularIMC() {
+    // Si tienes una instancia de Bascula asociada
+    if (this.miBascula && typeof this.miBascula.calcularIMC === 'function') {
+      return this.miBascula.calcularIMC();
+    }
+    // Si usas el modelo Bascula directamente
+    return Bascula.calcularIMC();
   }
 }
 

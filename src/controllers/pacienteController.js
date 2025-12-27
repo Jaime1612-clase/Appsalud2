@@ -19,23 +19,64 @@ const obtenerPaciente = async (req, res) => {
 };
 
 const crearPaciente = async (req, res) => {
-    res.send('Función crearPaciente en construcción');
-};
-
-const actualizarPaciente = async (req, res) => {
-    res.send('Función actualizarPaciente en construcción');
-};
-
-const eliminarPaciente = async (req, res) => {
-    res.send('Función eliminarPaciente en construcción');
+    const { nombre, apellidos, fechaDeNacimiento } = req.body;
+    if (!nombre || !apellidos || !fechaDeNacimiento) {
+        return res.render('index', {
+            title: 'APP Salud',
+            pacientes: await pacienteRepository.listar(),
+            message: 'Todos los campos son obligatorios para crear un paciente'
+        });
+    }
+    //Guardar el nuevo paciente
+    await pacienteRepository.crear({ nombre, apellidos, fechaDeNacimiento });
+    const pacientes = await pacienteRepository.listar();
+    res.render('index', {
+        title: 'APP Salud',
+        pacientes,
+        message: 'Paciente creado correctamente'
+    });
 };
 
 const mostrarFormularioActualizarPaciente = async (req, res) => {
     const { id } = req.params;
-    const paciente = await pacienteRepository.obtener
-        ? await pacienteRepository.obtener(id)
-        : null;
-    res.json({ message: 'mostrarFormularioActualizarPaciente', id, paciente });
+    const paciente = await pacienteRepository.buscarPorId(id);
+    if (!req.params.id) {
+        return res.redirect('/pacientes', {
+        });
+    }
+        res.render('actualizarPaciente', {  
+            title: 'APP Salud',
+            pacientes: await pacienteRepository.listar(),
+            message: 'ID de paciente es obligatorio para actualizar'
+        });
+    }
+
+
+const actualizarPaciente = async (req, res) => {
+    const id = req.params.id;
+    const { nombre, apellidos, fechaDeNacimiento } = req.body;
+    if (!nombre || !apellidos || !fechaDeNacimiento) {
+        const pacientes = await pacienteRepository.buscarPorId(id);
+        return res.render('actualizarPaciente', {
+            title: 'APP Salud',
+            pacientes,
+            message: 'Error: Todos los campos son obligatorios'
+        });
+    }
+    await pacienteRepository.actualizar(pacienteActualizado);
+    res.redirect('/pacientes');
+};
+
+const eliminarPaciente = async (req, res) => {
+    const id = req.params.id;
+    const eliminado = await pacienteRepository.eliminar(id);
+    const pacientes = await pacienteRepository.listar();
+    const message = eliminado ? 'Paciente eliminado correctamente' : 'No se encontró el paciente a eliminar';
+    res.render('index', {
+        title: 'APP Salud',
+        pacientes,
+        message
+    });
 };
 
 const listarPacientes = async (req, res) => {
@@ -59,4 +100,5 @@ module.exports = {
     eliminarPaciente,
     listarPacientes,
     mostrarFormularioActualizarPaciente
+    
 };

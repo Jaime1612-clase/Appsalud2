@@ -1,29 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
 </head>
 <body>
-    <span style="color: rgb(0, 204, 255);">
-        <%= message %>
-    </span>
-        <% if (paciente) { %>
-        <h1>Detalles del Paciente</h1>
-        <p><strong>Id:</strong> <%= paciente.id %></p>
-        <p><strong>Nombre:</strong> <%= paciente.nombre %></p>
-        <p><strong>Apellidos:</strong> <%= paciente.apellidos %></p>
-    <p><strong>Fecha de nacimiento:</strong> <%= paciente.fechaNacimiento.toISOString().slice(0,10) %></p>
-<% } %>
 
-</body>
-
-<ul>
+    <% if (message) { %>
+        <p style="color: rgb(0, 204, 255);"><%= message %></p>
     <% } %>
 
-    <a href="/">Volver a la lista de pacientes</a>
+    <% if (paciente) { %>
 
-</ul>
+        <h1>Detalles del Paciente</h1>
 
+        <ul>
+            <li><strong>id:</strong> <%= paciente.id %></li>
+            <li><strong>Nombre:</strong> <%= paciente.nombre %></li>
+            <li><strong>Apellidos:</strong> <%= paciente.apellidos %></li>
+            <li>
+                <strong>Fecha de nacimiento:</strong>
+                <%= new Date(paciente.fechaNacimiento).toISOString().slice(0, 10) %>
+            </li>
+        </ul>
+
+    <% } else { %>
+
+        <p>No se encontró el paciente solicitado.</p>
+
+    <% } %>
+
+    <a href="/">Volver al listado</a>
+
+</body>
 </html>
