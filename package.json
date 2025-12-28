@@ -16,6 +16,7 @@
     "mocha": "^11.7.5"
   },
   "dependencies": {
+    "bootstrap": "^5.3.8",
     "ejs": "^3.1.10",
     "express": "^5.2.1",
     "method-override": "^3.0.0",

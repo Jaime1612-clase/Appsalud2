@@ -1,67 +1,75 @@
 const pool = require('../db/mysql');
-const Paciente = require('../models/paciente');
+const Paciente = require('../models/Paciente');
 
 const listar = async () => {
+    // CORREGIDO: usar fechanacimiento (sin "De", minúscula)
     const [results] = await pool.query('SELECT * FROM pacientes');
     const pacientes = results.map(p => new Paciente(
         p.id,
         p.nombre,
         p.apellidos,
-        p.fechaDeNacimiento
+        p.fechanacimiento  // ← ¡CORREGIDO!
     ));
     return pacientes;
 };
 
 const crear = async (paciente) => {
-    const [results] = await pool.query('INSERT INTO pacientes (nombre, apellidos, fechaDeNacimiento) VALUES (?, ?, ?)',
+    // CORREGIDO: columna correcta
+    const [results] = await pool.query('INSERT INTO pacientes (nombre, apellidos, fechanacimiento) VALUES (?, ?, ?)',
         [paciente.nombre, paciente.apellidos, paciente.fechaDeNacimiento]);
-    const nuevoPaciente = new Paciente(
+    
+    return new Paciente(
         results.insertId,
         paciente.nombre,
         paciente.apellidos,
         paciente.fechaDeNacimiento
     );
-    return nuevoPaciente;
 }
 
 const buscarPorId = async (id) => {
+    // CORREGIDO: columna correcta
     const [results] = await pool.query('SELECT * FROM pacientes WHERE id = ?', [id]);
     if (results.length === 0) {
         return null;
     }
     const p = results[0];
-    const paciente = new Paciente(
+    return new Paciente(
         p.id,
         p.nombre,
         p.apellidos,
-        p.fechaDeNacimiento
+        p.fechanacimiento  // ← ¡CORREGIDO!
     );
-    return paciente;
 }
 
 const actualizar = async (paciente) => {
-    await pool.query('UPDATE pacientes SET nombre = ?, apellidos = ?, fechaDeNacimiento = ? WHERE id = ?',
-        [paciente.nombre, paciente.apellidos, paciente.fechaDeNacimiento, paciente.id]);
+    // CORREGIDO: columna correcta
+    await pool.query('UPDATE pacientes SET nombre = ?, apellidos = ?, fechanacimiento = ? WHERE id = ?',
+        [paciente.nombre, paciente.apellidos, paciente.fechaNacimiento, paciente.id]);
+    
     return new Paciente(
         paciente.id,
         paciente.nombre,
         paciente.apellidos,
-        paciente.fechaDeNacimiento
+        paciente.fechaNacimiento
     );
 }
 
 const eliminar = async (id) => {
     const [results] = await pool.query('DELETE FROM pacientes WHERE id = ?', [id]);
-    if (results.affectedRows === 0) {
-        return false;
+    
+    // Reiniciar AUTO_INCREMENT al máximo ID actual + 1
+    if (results.affectedRows > 0) {
+        const [maxIdResult] = await pool.query('SELECT MAX(id) as maxId FROM pacientes');
+        const nextId = (maxIdResult[0].maxId || 0) + 1;
+        await pool.query(`ALTER TABLE pacientes AUTO_INCREMENT = ${nextId}`);
     }
-    return true;
+    
+    return results.affectedRows > 0;
 }
 
-// EXPORTA CON LOS NOMBRES QUE USA EL CONTROLLER
 module.exports = {
     listar,
-    crear,        
+    crear,
     buscarPorId,
     actualizar,
     eliminar

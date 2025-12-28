@@ -1,4 +1,5 @@
 const pacienteRepository = require('../repositories/PacienteRepository');
+const Paciente = require('../models/Paciente');
 
 const obtenerPaciente = async (req, res) => {
     try {
@@ -39,30 +40,30 @@ const crearPaciente = async (req, res) => {
 
 const mostrarFormularioActualizarPaciente = async (req, res) => {
     const { id } = req.params;
+    if (!id) {
+        return res.redirect('/pacientes');
+    }
     const paciente = await pacienteRepository.buscarPorId(id);
-    if (!req.params.id) {
-        return res.redirect('/pacientes', {
-        });
-    }
-        res.render('actualizarPaciente', {  
-            title: 'APP Salud',
-            pacientes: await pacienteRepository.listar(),
-            message: 'ID de paciente es obligatorio para actualizar'
-        });
-    }
+    res.render('actualizarPaciente', {  
+        title: 'APP Salud',
+        paciente: paciente || null,
+        message: 'Actualizar paciente'
+    });
+}
 
 
 const actualizarPaciente = async (req, res) => {
     const id = req.params.id;
-    const { nombre, apellidos, fechaDeNacimiento } = req.body;
-    if (!nombre || !apellidos || !fechaDeNacimiento) {
-        const pacientes = await pacienteRepository.buscarPorId(id);
+    const { nombre, apellidos, fechaNacimiento } = req.body;
+    if (!nombre || !apellidos || !fechaNacimiento) {
+        const paciente = await pacienteRepository.buscarPorId(id);
         return res.render('actualizarPaciente', {
             title: 'APP Salud',
-            pacientes,
+            paciente,
             message: 'Error: Todos los campos son obligatorios'
         });
     }
+    const pacienteActualizado = new Paciente(id, nombre, apellidos, fechaNacimiento);
     await pacienteRepository.actualizar(pacienteActualizado);
     res.redirect('/pacientes');
 };

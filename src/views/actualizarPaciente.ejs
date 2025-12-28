@@ -1,25 +1,29 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta><meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
-</head>
-<body>
-         <span style="color: red;"><%= message %></span>
-    <h1>Actualizar Paciente</h1>
-        <form action="/pacientes/<%= paciente.id %>?_method=PUT" method="POST">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" value="<%= paciente.nombre %>" required>
-            <br>
-            <label for="apellidos">Apellidos:</label>
-            <input type="text" id="apellidos" name="apellidos" value="<%= paciente.apellidos %>" required>
-            <br>
-            <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-            <input type="date" id="fechaNacimiento" name="fechaNacimiento" value="<%= paciente.fechaNacimiento %>" required>
-            <br>
-            <button type="submit">Actualizar Paciente</button>
-        </form>
-    <a href="/">Volver al listado</a>
-</body>
-</html>
+<%- include ('partials/head') %>
+<div class="container my-4">
+  <h1 class="h4 mb-3 text-uppercase fw-bold">Actualizar Paciente</h1>
+  <% if (paciente) { %>
+    <form action="/pacientes/<%= paciente.id %>?_method=PUT" method="POST" class="row g-3">
+      <div class="col-md-6">
+        <label for="nombre" class="form-label text-uppercase fw-semibold">Nombre</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" value="<%= paciente.nombre %>" required>
+      </div>
+      <div class="col-md-6">
+        <label for="apellidos" class="form-label text-uppercase fw-semibold">Apellidos</label>
+        <input type="text" class="form-control" id="apellidos" name="apellidos" value="<%= paciente.apellidos %>" required>
+      </div>
+      <div class="col-md-4">
+        <label for="fechaNacimiento" class="form-label text-uppercase fw-semibold">Fecha de Nacimiento</label>
+        <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="<%= paciente.fechaNacimiento ? new Date(paciente.fechaNacimiento).toISOString().slice(0,10) : '' %>" required>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Actualizar Paciente</button>
+        <a href="/" class="btn btn-secondary ms-2">Volver al listado</a>
+      </div>
+    </form>
+  <% } else { %>
+    <div class="alert alert-warning">No se encontró el paciente.</div>
+    <a href="/" class="btn btn-secondary">Volver al listado</a>
+  <% } %>
+</div>
+
+<%- include ('partials/footer') %>
