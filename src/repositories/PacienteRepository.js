@@ -2,32 +2,50 @@ const pool = require('../db/mysql');
 const Paciente = require('../models/Paciente');
 
 const listar = async () => {
-    // CORREGIDO: usar fechanacimiento (sin "De", minúscula)
+    // Asegurar columnas opcionales
+    try {
+        await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS peso FLOAT NULL');
+        await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS temperatura FLOAT NULL');
+    } catch (e) {
+        // Ignorar si la versión de MySQL no soporta IF NOT EXISTS
+    }
     const [results] = await pool.query('SELECT * FROM pacientes');
     const pacientes = results.map(p => new Paciente(
         p.id,
         p.nombre,
         p.apellidos,
-        p.fechanacimiento  // ← ¡CORREGIDO!
+        p.fechanacimiento,
+        p.peso,
+        p.temperatura
     ));
     return pacientes;
 };
 
 const crear = async (paciente) => {
-    // CORREGIDO: columna correcta
-    const [results] = await pool.query('INSERT INTO pacientes (nombre, apellidos, fechanacimiento) VALUES (?, ?, ?)',
-        [paciente.nombre, paciente.apellidos, paciente.fechaDeNacimiento]);
+    // Asegurar columnas
+    try {
+        await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS peso FLOAT NULL');
+        await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS temperatura FLOAT NULL');
+    } catch (e) {}
+
+    const [results] = await pool.query('INSERT INTO pacientes (nombre, apellidos, fechanacimiento, peso, temperatura) VALUES (?, ?, ?, ?, ?)',
+        [paciente.nombre, paciente.apellidos, paciente.fechaDeNacimiento, paciente.peso || null, paciente.temperatura || null]);
     
     return new Paciente(
         results.insertId,
         paciente.nombre,
         paciente.apellidos,
-        paciente.fechaDeNacimiento
+        paciente.fechaDeNacimiento,
+        paciente.peso || null,
+        paciente.temperatura || null
     );
 }
 
 const buscarPorId = async (id) => {
-    // CORREGIDO: columna correcta
+    try {
+        await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS peso FLOAT NULL');
+        await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS temperatura FLOAT NULL');
+    } catch (e) {}
     const [results] = await pool.query('SELECT * FROM pacientes WHERE id = ?', [id]);
     if (results.length === 0) {
         return null;
@@ -37,27 +55,35 @@ const buscarPorId = async (id) => {
         p.id,
         p.nombre,
         p.apellidos,
-        p.fechanacimiento  // ← ¡CORREGIDO!
+        p.fechanacimiento,
+        p.peso,
+        p.temperatura  
     );
 }
 
 const actualizar = async (paciente) => {
-    // CORREGIDO: columna correcta
-    await pool.query('UPDATE pacientes SET nombre = ?, apellidos = ?, fechanacimiento = ? WHERE id = ?',
-        [paciente.nombre, paciente.apellidos, paciente.fechaNacimiento, paciente.id]);
+    try {
+        await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS peso FLOAT NULL');
+        await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS temperatura FLOAT NULL');
+    } catch (e) {}
+
+    await pool.query('UPDATE pacientes SET nombre = ?, apellidos = ?, fechanacimiento = ?, peso = ?, temperatura = ? WHERE id = ?',
+        [paciente.nombre, paciente.apellidos, paciente.fechaNacimiento, paciente.peso || null, paciente.temperatura || null, paciente.id]);
     
     return new Paciente(
         paciente.id,
         paciente.nombre,
         paciente.apellidos,
-        paciente.fechaNacimiento
+        paciente.fechaNacimiento,
+        paciente.peso || null,
+        paciente.temperatura || null
     );
 }
 
 const eliminar = async (id) => {
     const [results] = await pool.query('DELETE FROM pacientes WHERE id = ?', [id]);
     
-    // Reiniciar AUTO_INCREMENT al máximo ID actual + 1
+    // Reiniciar AUTO_INCREMENT al máximo ID actual + 1, Esto es para que cuando crees un paciente nuevo, se reinice el ID y no queden huecos en la numeración.
     if (results.affectedRows > 0) {
         const [maxIdResult] = await pool.query('SELECT MAX(id) as maxId FROM pacientes');
         const nextId = (maxIdResult[0].maxId || 0) + 1;

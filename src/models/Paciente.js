@@ -1,18 +1,18 @@
 const Bascula = require('./Bascula');
 class Paciente {
-  constructor(id,nombre, apellidos, fechaNacimiento) {
+  constructor(id, nombre, apellidos, fechaNacimiento, peso = null, temperatura = null) {
     this.id = id;
     this.nombre = nombre;
     this.apellidos = apellidos;
     this.miBascula = null;
+    this.peso = peso !== undefined ? peso : null;
+    this.temperatura = temperatura !== undefined ? temperatura : null;
 
     // Parsing de fecha - acepta strings y objetos Date
     let fecha;
     try {
       if (typeof fechaNacimiento === 'string') {
-        // Intenta parsear como "YYYY-MM-DD"
         fecha = new Date(fechaNacimiento + 'T00:00:00Z');
-        // Si eso falla, intenta el constructor Date(year, month, day)
         if (isNaN(fecha.getTime())) {
           const parts = fechaNacimiento.split('-');
           if (parts.length === 3) {

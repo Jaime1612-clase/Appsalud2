@@ -11,7 +11,7 @@ const obtenerPaciente = async (req, res) => {
         res.render('Buscar', {
             title: 'App Salud',
             message: paciente ? 'Paciente encontrado' : 'Paciente no encontrado',
-            paciente: paciente || null // importante: siempre pasar
+            paciente: paciente || null 
         });
     } catch (err) {
         console.error('Error al obtener paciente:', err);
@@ -20,16 +20,16 @@ const obtenerPaciente = async (req, res) => {
 };
 
 const crearPaciente = async (req, res) => {
-    const { nombre, apellidos, fechaDeNacimiento } = req.body;
+    const { nombre, apellidos, fechaDeNacimiento, peso, temperatura } = req.body;
     if (!nombre || !apellidos || !fechaDeNacimiento) {
         return res.render('index', {
             title: 'APP Salud',
             pacientes: await pacienteRepository.listar(),
-            message: 'Todos los campos son obligatorios para crear un paciente'
+            message: 'Nombre, apellidos y fecha de nacimiento son obligatorios'
         });
     }
-    //Guardar el nuevo paciente
-    await pacienteRepository.crear({ nombre, apellidos, fechaDeNacimiento });
+    //Guardar el nuevo paciente incluyendo peso y temperatura 
+    await pacienteRepository.crear({ nombre, apellidos, fechaDeNacimiento, peso: peso ? Number(peso) : null, temperatura: temperatura ? Number(temperatura) : null });
     const pacientes = await pacienteRepository.listar();
     res.render('index', {
         title: 'APP Salud',
@@ -54,16 +54,16 @@ const mostrarFormularioActualizarPaciente = async (req, res) => {
 
 const actualizarPaciente = async (req, res) => {
     const id = req.params.id;
-    const { nombre, apellidos, fechaNacimiento } = req.body;
+    const { nombre, apellidos, fechaNacimiento, peso, temperatura } = req.body;
     if (!nombre || !apellidos || !fechaNacimiento) {
         const paciente = await pacienteRepository.buscarPorId(id);
         return res.render('actualizarPaciente', {
             title: 'APP Salud',
             paciente,
-            message: 'Error: Todos los campos son obligatorios'
+            message: 'Error: Nombre, apellidos y fecha de nacimiento son obligatorios'
         });
     }
-    const pacienteActualizado = new Paciente(id, nombre, apellidos, fechaNacimiento);
+    const pacienteActualizado = new Paciente(id, nombre, apellidos, fechaNacimiento, peso ? Number(peso) : null, temperatura ? Number(temperatura) : null);
     await pacienteRepository.actualizar(pacienteActualizado);
     res.redirect('/pacientes');
 };

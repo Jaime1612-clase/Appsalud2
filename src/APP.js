@@ -11,7 +11,7 @@ const basculaRouter = require('./routes/bascula');
 const app = express();
 const PORT = 3000;
 
-// DEBUG: Middleware para logging
+//logger
 app.use((req, res, next) => {
     console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.url}`);
     next();
