@@ -1,13 +1,15 @@
+/*# Custom CSS ES LO QUE MOLDEA LA APLICACIÓN DE SALUD ES DECIR QUE ES LA PARTE  BONITA*/
+
 :root {
   /* Paleta de colores personalizada */
-  --bs-primary: #4a90e2;        /* Azul profesional */
-  --bs-secondary: #7b68ee;      /* Púrpura suave */
-  --bs-success: #52c41a;        /* Verde vibrante */
-  --bs-danger: #ff4d4f;         /* Rojo suave */
-  --bs-warning: #faad14;        /* Naranja calidez */
-  --bs-info: #1890ff;           /* Azul info */
-  --bs-light: #f5f7fa;          /* Gris claro */
-  --bs-dark: #2d3748;           /* Gris oscuro */
+  --bs-primary: #4a90e2;        
+  --bs-secondary: #7b68ee;    
+  --bs-success: #52c41a;        
+  --bs-danger: #ff4d4f;        
+  --bs-warning: #faad14;        
+  --bs-info: #1890ff;          
+  --bs-light: #f5f7fa;          
+  --bs-dark: #2d3748;           
   
   /* Fuentes y espaciado */
   --bs-font-sans-serif: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
