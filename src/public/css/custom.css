@@ -1,5 +1,5 @@
 /*# Custom CSS ES LO QUE MOLDEA LA APLICACIÓN DE SALUD ES DECIR QUE ES LA PARTE  BONITA*/
-
+/*Le intentare explicar todo perfecto y si tiene una duda hagamelo saber */
 :root {
   /* Paleta de colores personalizada */
   --bs-primary: #4a90e2;        
@@ -39,7 +39,7 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Tarjetas con sombra moderna */
+/* Tarjetas con sombra y movimiento*/
 .card {
   border: none;
   border-radius: 10px;
