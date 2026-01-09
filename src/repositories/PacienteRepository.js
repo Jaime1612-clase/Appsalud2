@@ -40,7 +40,7 @@ const crear = async (paciente) => {
         paciente.temperatura || null
     );
 }
-
+// Buscar paciente por ID
 const buscarPorId = async (id) => {
     try {
         await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS peso FLOAT NULL');
@@ -60,7 +60,7 @@ const buscarPorId = async (id) => {
         p.temperatura  
     );
 }
-
+// Actualizar paciente existente
 const actualizar = async (paciente) => {
     try {
         await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS peso FLOAT NULL');
@@ -90,7 +90,7 @@ const actualizar = async (paciente) => {
         paciente.temperatura || null
     );
 }
-
+// Eliminar paciente por ID
 const eliminar = async (id) => {
     const [results] = await pool.query('DELETE FROM pacientes WHERE id = ?', [id]);
     

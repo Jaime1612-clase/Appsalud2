@@ -1,6 +1,6 @@
 const pacienteRepository = require('../repositories/PacienteRepository');
 const Paciente = require('../models/Paciente');
-
+ // Obtener paciente por ID
 const obtenerPaciente = async (req, res) => {
     try {
         const id = req.params.id;
@@ -19,7 +19,7 @@ const obtenerPaciente = async (req, res) => {
         res.status(500).send('Error al obtener paciente desde la base de datos');
     }
 };
-
+// Crear nuevo paciente
 const crearPaciente = async (req, res) => {
     const { nombre, apellidos, fechaDeNacimiento, peso, temperatura } = req.body;
     if (!nombre || !apellidos || !fechaDeNacimiento) {
@@ -34,7 +34,7 @@ const crearPaciente = async (req, res) => {
     req.session.message = 'Paciente creado correctamente';
     res.redirect('/pacientes');
 };
-
+ // Mostrar formulario para actualizar paciente
 const mostrarFormularioActualizarPaciente = async (req, res) => {
     const { id } = req.params;
     if (!id) {
@@ -49,7 +49,7 @@ const mostrarFormularioActualizarPaciente = async (req, res) => {
     });
 }
 
-
+// Actualizar paciente existente
 const actualizarPaciente = async (req, res) => {
     const id = req.params.id;
     const { nombre, apellidos, fechaNacimiento, peso, temperatura } = req.body;
@@ -68,7 +68,7 @@ const actualizarPaciente = async (req, res) => {
     await pacienteRepository.actualizar(pacienteActualizado);
     res.redirect('/pacientes');
 };
-
+// Eliminar paciente
 const eliminarPaciente = async (req, res) => {
     const id = req.params.id;
     const eliminado = await pacienteRepository.eliminar(id);
@@ -76,7 +76,7 @@ const eliminarPaciente = async (req, res) => {
     req.session.message = message;
     res.redirect('/pacientes');
 };
-
+// Listar todos los pacientes
 const listarPacientes = async (req, res) => {
     try {
         const pacientes = await pacienteRepository.listar();

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// Usuario para iniciar sesión
+// Usuario para iniciar sesión, se puede actualizar para crear un sistema más robusto de roles y usuarios pero mientras solo hay un usuario fijo  que seria la perosna que administra la app.
 const USER = {
   username: 'admin',
   password: 'jaime123'
