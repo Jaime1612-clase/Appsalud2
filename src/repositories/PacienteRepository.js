@@ -14,7 +14,7 @@ const listar = async () => {
         p.id,
         p.nombre,
         p.apellidos,
-        p.fechanacimiento,
+        p.fechaDeNacimiento || p.fechanacimiento,
         p.peso,
         p.temperatura
     ));
@@ -28,7 +28,7 @@ const crear = async (paciente) => {
         await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS temperatura FLOAT NULL');
     } catch (e) {}
 
-    const [results] = await pool.query('INSERT INTO pacientes (nombre, apellidos, fechanacimiento, peso, temperatura) VALUES (?, ?, ?, ?, ?)',
+    const [results] = await pool.query('INSERT INTO pacientes (nombre, apellidos, fechaDeNacimiento, peso, temperatura) VALUES (?, ?, ?, ?, ?)',
         [paciente.nombre, paciente.apellidos, paciente.fechaDeNacimiento, paciente.peso || null, paciente.temperatura || null]);
     
     return new Paciente(
@@ -55,7 +55,7 @@ const buscarPorId = async (id) => {
         p.id,
         p.nombre,
         p.apellidos,
-        p.fechanacimiento,
+        p.fechaDeNacimiento || p.fechanacimiento,
         p.peso,
         p.temperatura  
     );
@@ -67,14 +67,14 @@ const actualizar = async (paciente) => {
         await pool.query('ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS temperatura FLOAT NULL');
     } catch (e) {}
 
-    await pool.query('UPDATE pacientes SET nombre = ?, apellidos = ?, fechanacimiento = ?, peso = ?, temperatura = ? WHERE id = ?',
-        [paciente.nombre, paciente.apellidos, paciente.fechaNacimiento, paciente.peso || null, paciente.temperatura || null, paciente.id]);
+    await pool.query('UPDATE pacientes SET nombre = ?, apellidos = ?, fechaDeNacimiento = ?, peso = ?, temperatura = ? WHERE id = ?',
+        [paciente.nombre, paciente.apellidos, paciente.fechaDeNacimiento, paciente.peso || null, paciente.temperatura || null, paciente.id]);
     
     return new Paciente(
         paciente.id,
         paciente.nombre,
         paciente.apellidos,
-        paciente.fechaNacimiento,
+        paciente.fechaDeNacimiento,
         paciente.peso || null,
         paciente.temperatura || null
     );

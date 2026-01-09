@@ -16,7 +16,7 @@
             <%= paciente.apellidos %>
           </li>
           <li class="list-group-item text-muted"><strong>Fecha de nacimiento:</strong>
-            <%= new Date(paciente.fechaNacimiento).toISOString().slice(0, 10) %>
+            <%= new Date(paciente.fechaDeNacimiento).toISOString().slice(0, 10) %>
           </li>
           <li class="list-group-item"><strong>Peso:</strong>
             <%= paciente.peso !=null ? Number(paciente.peso).toFixed(2) + ' kg' : 'N/D' %>

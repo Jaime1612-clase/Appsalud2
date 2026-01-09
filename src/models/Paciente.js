@@ -1,6 +1,6 @@
 const Bascula = require('./Bascula');
 class Paciente {
-  constructor(id, nombre, apellidos, fechaNacimiento, peso = null, temperatura = null) {
+  constructor(id, nombre, apellidos, fechaDeNacimiento, peso = null, temperatura = null) {
     this.id = id;
     this.nombre = nombre;
     this.apellidos = apellidos;
@@ -11,27 +11,27 @@ class Paciente {
     // Parsing de fecha - acepta strings y objetos Date
     let fecha;
     try {
-      if (typeof fechaNacimiento === 'string') {
-        fecha = new Date(fechaNacimiento + 'T00:00:00Z');
+      if (typeof fechaDeNacimiento === 'string') {
+        fecha = new Date(fechaDeNacimiento + 'T00:00:00Z');
         if (isNaN(fecha.getTime())) {
-          const parts = fechaNacimiento.split('-');
+          const parts = fechaDeNacimiento.split('-');
           if (parts.length === 3) {
             fecha = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
           }
         }
       } else {
-        fecha = new Date(fechaNacimiento);
+        fecha = new Date(fechaDeNacimiento);
       }
       
       // Validación básica
       if (isNaN(fecha.getTime())) {
-        throw new Error('Fecha de nacimiento inválida: ' + fechaNacimiento);
+        throw new Error('Fecha de nacimiento inválida: ' + fechaDeNacimiento);
       }
     } catch (e) {
-      throw new Error('Fecha de nacimiento inválida: ' + fechaNacimiento);
+      throw new Error('Fecha de nacimiento inválida: ' + fechaDeNacimiento);
     }
-    
-    this.fechaNacimiento = fecha;
+
+    this.fechaDeNacimiento = fecha;
 
     // Se asocia una báscula por defecto
     this.bascula = new Bascula();
@@ -51,22 +51,22 @@ class Paciente {
   modificarApellidos(apellidos) { this.apellidos = apellidos; }
 
  
-  obtenerFechaNacimiento() { return this.fechaNacimiento; }
+  obtenerFechaNacimiento() { return this.fechaDeNacimiento; }
 
   modificarFechaNacimiento(fecha) {
     const nuevaFecha = new Date(fecha);
     if (isNaN(nuevaFecha.getTime())) {
       throw new Error('Fecha de nacimiento inválida');
     }
-    this.fechaNacimiento = nuevaFecha;
+    this.fechaDeNacimiento = nuevaFecha;
   }
 
   // Calcula la edad actual del paciente
   obtenerEdad() {
     const hoy = new Date();
-    let edad = hoy.getFullYear() - this.fechaNacimiento.getFullYear();
-    const m = hoy.getMonth() - this.fechaNacimiento.getMonth();
-    if (m < 0 || (m === 0 && hoy.getDate() < this.fechaNacimiento.getDate())) {
+    let edad = hoy.getFullYear() - this.fechaDeNacimiento.getFullYear();
+    const m = hoy.getMonth() - this.fechaDeNacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < this.fechaDeNacimiento.getDate())) {
       edad--;
     }
     return edad;

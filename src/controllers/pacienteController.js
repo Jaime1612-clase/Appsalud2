@@ -54,8 +54,8 @@ const mostrarFormularioActualizarPaciente = async (req, res) => {
 
 const actualizarPaciente = async (req, res) => {
     const id = req.params.id;
-    const { nombre, apellidos, fechaNacimiento, peso, temperatura } = req.body;
-    if (!nombre || !apellidos || !fechaNacimiento) {
+    const { nombre, apellidos, fechaDeNacimiento, peso, temperatura } = req.body;
+    if (!nombre || !apellidos || !fechaDeNacimiento) {
         const paciente = await pacienteRepository.buscarPorId(id);
         return res.render('actualizarPaciente', {
             title: 'APP Salud',
@@ -63,7 +63,7 @@ const actualizarPaciente = async (req, res) => {
             message: 'Error: Nombre, apellidos y fecha de nacimiento son obligatorios'
         });
     }
-    const pacienteActualizado = new Paciente(id, nombre, apellidos, fechaNacimiento, peso ? Number(peso) : null, temperatura ? Number(temperatura) : null);
+    const pacienteActualizado = new Paciente(id, nombre, apellidos, fechaDeNacimiento, peso ? Number(peso) : null, temperatura ? Number(temperatura) : null);
     await pacienteRepository.actualizar(pacienteActualizado);
     res.redirect('/pacientes');
 };
@@ -71,22 +71,18 @@ const actualizarPaciente = async (req, res) => {
 const eliminarPaciente = async (req, res) => {
     const id = req.params.id;
     const eliminado = await pacienteRepository.eliminar(id);
-    const pacientes = await pacienteRepository.listar();
     const message = eliminado ? 'Paciente eliminado correctamente' : 'No se encontró el paciente a eliminar';
-    res.render('index', {
-        title: 'APP Salud',
-        pacientes,
-        message
-    });
+    res.redirect(`/pacientes?message=${encodeURIComponent(message)}`);
 };
 
 const listarPacientes = async (req, res) => {
     try {
         const pacientes = await pacienteRepository.listar();
+        const message = req.query.message || null;
         res.render('index', {
             title: 'APP Salud',
             pacientes,
-            message: 'Bienvenidos a la APP Salud'
+            message
         });
     } catch (err) {
         console.error('Error al listar pacientes:', err.message || err);

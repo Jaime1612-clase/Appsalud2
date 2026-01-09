@@ -3,12 +3,21 @@
         <h1 class="display-6 mb-3 text-uppercase fw-bold">
             <%= title %>
         </h1>
-
-        <% if (message) { %>
-            <div class="alert alert-info"><strong>
-                    <%= message %>
-                </strong></div>
-            <% } %>
+        <div class="mb-4">
+            <div style="background: #cfe2ff; border-radius: 1rem; padding: 1rem 1.5rem; color: #084298; font-size: 1.3rem; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                Bienvenidos a la APP Salud
+            </div>
+        </div>
+    
+        <% if (message && message !== 'Bienvenidos a la APP Salud¡') { %>
+            <% 
+                let successMsgs = ['Paciente creado correctamente', 'Paciente actualizado correctamente'];
+                let isDeleteMsg = message === 'Paciente eliminado correctamente';
+            %>
+            <div class="alert <%= isDeleteMsg ? 'alert-danger' : (successMsgs.includes(message) ? 'alert-success' : 'alert-danger') %>" ><strong>
+                <%= message %>
+            </strong></div>
+        <% } %>
 
                 <div class="card mb-4">
                     <div class="card-header">
@@ -42,7 +51,7 @@
                                                     <%= paciente.apellidos %>
                                                 </td>
                                                 <td>
-                                                    <%= new Date(paciente.fechaNacimiento).toISOString().slice(0, 10) %>
+                                                    <%= new Date(paciente.fechaDeNacimiento).toISOString().slice(0, 10) %>
                                                 </td>
                                                 <td>
                                                     <%= paciente.peso !=null ? Number(paciente.peso).toFixed(2) : 'N/D'

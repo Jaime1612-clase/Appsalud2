@@ -7,7 +7,9 @@ CREATE TABLE IF NOT EXISTS pacientes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL,
   apellidos VARCHAR(100) NOT NULL,
-  fechaDeNacimiento DATE NOT NULL
+  fechaDeNacimiento DATE NOT NULL,
+  peso FLOAT NULL,
+  temperatura FLOAT NULL
 );
 
 -- 3. Crear la tabla de basculas
@@ -21,10 +23,10 @@ CREATE TABLE IF NOT EXISTS basculas (
 );
 
 -- 4. Insertar el paciente de ejemplo
-INSERT INTO pacientes (nombre, apellidos, fechaDeNacimiento)
-VALUES ('Jaime', 'Carrasco', '1999-11-18');
+INSERT INTO pacientes (nombre, apellidos, fechaDeNacimiento, peso, temperatura)
+VALUES ('Jaime', 'Carrasco', '1999-11-18', 70.0, 36.6);
 
--- 5. Insertar los registros de bascula asociados al paciente
+-- 5. Insertar registros de bascula asociados al paciente
 INSERT INTO basculas (paciente_id, peso, altura, fecha)
 VALUES
 (1, 75.5, 1.60, '2021-10-29'),
