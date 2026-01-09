@@ -11,7 +11,8 @@ const obtenerPaciente = async (req, res) => {
         res.render('Buscar', {
             title: 'App Salud',
             message: paciente ? 'Paciente encontrado' : 'Paciente no encontrado',
-            paciente: paciente || null 
+            paciente: paciente || null,
+            csrfToken: req.csrfToken ? req.csrfToken() : ''
         });
     } catch (err) {
         console.error('Error al obtener paciente:', err);
@@ -25,17 +26,13 @@ const crearPaciente = async (req, res) => {
         return res.render('index', {
             title: 'APP Salud',
             pacientes: await pacienteRepository.listar(),
-            message: 'Nombre, apellidos y fecha de nacimiento son obligatorios'
+            message: 'Nombre, apellidos y fecha de nacimiento son obligatorios',
+            csrfToken: req.csrfToken ? req.csrfToken() : ''
         });
     }
     //Guardar el nuevo paciente incluyendo peso y temperatura 
     await pacienteRepository.crear({ nombre, apellidos, fechaDeNacimiento, peso: peso ? Number(peso) : null, temperatura: temperatura ? Number(temperatura) : null });
-    const pacientes = await pacienteRepository.listar();
-    res.render('index', {
-        title: 'APP Salud',
-        pacientes,
-        message: 'Paciente creado correctamente'
-    });
+    res.redirect('/pacientes');
 };
 
 const mostrarFormularioActualizarPaciente = async (req, res) => {
@@ -47,7 +44,8 @@ const mostrarFormularioActualizarPaciente = async (req, res) => {
     res.render('actualizarPaciente', {  
         title: 'APP Salud',
         paciente: paciente || null,
-        message: 'Actualizar paciente'
+        message: 'Actualizar paciente',
+        csrfToken: req.csrfToken ? req.csrfToken() : ''
     });
 }
 
@@ -55,12 +53,15 @@ const mostrarFormularioActualizarPaciente = async (req, res) => {
 const actualizarPaciente = async (req, res) => {
     const id = req.params.id;
     const { nombre, apellidos, fechaNacimiento, peso, temperatura } = req.body;
-    if (!nombre || !apellidos || !fechaNacimiento) {
+    // Normalizar fecha para evitar problemas con campos vacíos o mal formateados
+    const fechaValida = fechaNacimiento && !isNaN(new Date(fechaNacimiento).getTime());
+    if (!nombre || !apellidos || !fechaValida) {
         const paciente = await pacienteRepository.buscarPorId(id);
         return res.render('actualizarPaciente', {
             title: 'APP Salud',
             paciente,
-            message: 'Error: Nombre, apellidos y fecha de nacimiento son obligatorios'
+            message: 'Error: Nombre, apellidos y fecha de nacimiento son obligatorios',
+            csrfToken: req.csrfToken ? req.csrfToken() : ''
         });
     }
     const pacienteActualizado = new Paciente(id, nombre, apellidos, fechaNacimiento, peso ? Number(peso) : null, temperatura ? Number(temperatura) : null);
@@ -76,7 +77,8 @@ const eliminarPaciente = async (req, res) => {
     res.render('index', {
         title: 'APP Salud',
         pacientes,
-        message
+        message,
+        csrfToken: req.csrfToken ? req.csrfToken() : ''
     });
 };
 
@@ -86,7 +88,8 @@ const listarPacientes = async (req, res) => {
         res.render('index', {
             title: 'APP Salud',
             pacientes,
-            message: 'Bienvenidos a la APP Salud'
+            message: 'Bienvenidos a la APP Salud',
+            csrfToken: req.csrfToken ? req.csrfToken() : ''
         });
     } catch (err) {
         console.error('Error al listar pacientes:', err.message || err);

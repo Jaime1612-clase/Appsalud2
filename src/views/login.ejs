@@ -1,0 +1,24 @@
+<%- include('partials/head') %>
+<div class="container my-4">
+  <h1 class="h4 mb-3 text-uppercase fw-bold text-soft-blue">Iniciar sesión</h1>
+  <form action="/login" method="POST" class="row g-3">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="col-md-6">
+      <label for="username" class="form-label">Usuario</label>
+      <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+    <div class="col-md-6">
+      <label for="password" class="form-label">Contraseña</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Entrar</button>
+    </div>
+    <% if (message) { %>
+      <div class="col-12">
+        <div class="alert alert-danger"><%= message %></div>
+      </div>
+    <% } %>
+  </form>
+</div>
+<%- include('partials/footer') %>

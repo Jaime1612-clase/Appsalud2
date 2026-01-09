@@ -9,28 +9,28 @@ class Paciente {
     this.temperatura = temperatura !== undefined ? temperatura : null;
 
     // Parsing de fecha - acepta strings y objetos Date
-    let fecha;
-    try {
-      if (typeof fechaNacimiento === 'string') {
-        fecha = new Date(fechaNacimiento + 'T00:00:00Z');
-        if (isNaN(fecha.getTime())) {
-          const parts = fechaNacimiento.split('-');
-          if (parts.length === 3) {
-            fecha = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+    let fecha = null;
+    if (fechaNacimiento) {
+      try {
+        if (typeof fechaNacimiento === 'string') {
+          fecha = new Date(fechaNacimiento + 'T00:00:00Z');
+          if (isNaN(fecha.getTime())) {
+            const parts = fechaNacimiento.split('-');
+            if (parts.length === 3) {
+              fecha = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+            }
           }
+        } else {
+          fecha = new Date(fechaNacimiento);
         }
-      } else {
-        fecha = new Date(fechaNacimiento);
+        // Validación básica
+        if (isNaN(fecha.getTime())) {
+          fecha = null;
+        }
+      } catch (e) {
+        fecha = null;
       }
-      
-      // Validación básica
-      if (isNaN(fecha.getTime())) {
-        throw new Error('Fecha de nacimiento inválida: ' + fechaNacimiento);
-      }
-    } catch (e) {
-      throw new Error('Fecha de nacimiento inválida: ' + fechaNacimiento);
     }
-    
     this.fechaNacimiento = fecha;
 
     // Se asocia una báscula por defecto

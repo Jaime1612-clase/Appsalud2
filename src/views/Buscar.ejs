@@ -16,7 +16,11 @@
             <%= paciente.apellidos %>
           </li>
           <li class="list-group-item text-muted"><strong>Fecha de nacimiento:</strong>
-            <%= new Date(paciente.fechaNacimiento).toISOString().slice(0, 10) %>
+            <% 
+              let fecha = paciente.fechaNacimiento;
+              let fechaValida = fecha && !isNaN(new Date(fecha).getTime());
+            %>
+            <%= fechaValida ? new Date(fecha).toISOString().slice(0, 10) : 'N/D' %>
           </li>
           <li class="list-group-item"><strong>Peso:</strong>
             <%= paciente.peso !=null ? Number(paciente.peso).toFixed(2) + ' kg' : 'N/D' %>
