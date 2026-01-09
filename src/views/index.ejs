@@ -4,15 +4,39 @@
             <%= title %>
         </h1>
         <div class="mb-4">
-            <div style="background: #cfe2ff; border-radius: 1rem; padding: 1rem 1.5rem; color: #084298; font-size: 1.3rem; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+            <div
+                style="background: #cfe2ff; border-radius: 1rem; padding: 1rem 1.5rem; color: #084298; font-size: 1.3rem; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
                 Bienvenidos a la APP Salud
             </div>
         </div>
-        
         <% if (message) { %>
-            <div class="alert alert-info"><strong>
-                    <%= message %>
-                </strong></div>
+            <!-- Modal Bootstrap para mostrar la ventana emergente al crear o eliminar un paciente -->
+            <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header"
+                            style="background: linear-gradient(90deg, #3a8dde 0%, #7b2ff2 100%); color: #fff;">
+                            <h5 class="modal-title" id="alertModalLabel">Aviso</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <strong>
+                                <%= message %>
+                            </strong>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+                    alertModal.show();
+                });
+            </script>
             <% } %>
 
                 <div class="card mb-4">
@@ -47,11 +71,10 @@
                                                     <%= paciente.apellidos %>
                                                 </td>
                                                 <td>
-                                                    <% 
-                                                        let fecha = paciente.fechaNacimiento;
-                                                        let fechaValida = fecha && !isNaN(new Date(fecha).getTime());
-                                                    %>
-                                                    <%= fechaValida ? new Date(fecha).toISOString().slice(0, 10) : 'N/D' %>
+                                                    <% let fecha=paciente.fechaNacimiento; let fechaValida=fecha &&
+                                                        !isNaN(new Date(fecha).getTime()); %>
+                                                        <%= fechaValida ? new Date(fecha).toISOString().slice(0, 10)
+                                                            : 'N/D' %>
                                                 </td>
                                                 <td>
                                                     <%= paciente.peso !=null ? Number(paciente.peso).toFixed(2) : 'N/D'

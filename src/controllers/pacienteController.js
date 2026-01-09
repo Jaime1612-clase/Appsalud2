@@ -30,8 +30,8 @@ const crearPaciente = async (req, res) => {
             csrfToken: req.csrfToken ? req.csrfToken() : ''
         });
     }
-    //Guardar el nuevo paciente incluyendo peso y temperatura 
     await pacienteRepository.crear({ nombre, apellidos, fechaDeNacimiento, peso: peso ? Number(peso) : null, temperatura: temperatura ? Number(temperatura) : null });
+    req.session.message = 'Paciente creado correctamente';
     res.redirect('/pacientes');
 };
 
@@ -72,23 +72,20 @@ const actualizarPaciente = async (req, res) => {
 const eliminarPaciente = async (req, res) => {
     const id = req.params.id;
     const eliminado = await pacienteRepository.eliminar(id);
-    const pacientes = await pacienteRepository.listar();
     const message = eliminado ? 'Paciente eliminado correctamente' : 'No se encontró el paciente a eliminar';
-    res.render('index', {
-        title: 'APP Salud',
-        pacientes,
-        message,
-        csrfToken: req.csrfToken ? req.csrfToken() : ''
-    });
+    req.session.message = message;
+    res.redirect('/pacientes');
 };
 
 const listarPacientes = async (req, res) => {
     try {
         const pacientes = await pacienteRepository.listar();
+        const message = req.session.message;
+        delete req.session.message;
         res.render('index', {
             title: 'APP Salud',
             pacientes,
-            message: 'Bienvenidos a la APP Salud',
+            message,
             csrfToken: req.csrfToken ? req.csrfToken() : ''
         });
     } catch (err) {
